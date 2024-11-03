@@ -1,0 +1,42 @@
+// Listar todos Clientes que não tenham realizado uma compra
+select cst.customer_id, cst.first_name, cst.last_name
+from customers cst
+left join orders ord
+  on cst.customer_id = ord.customer_id
+where ord.customer_id is null
+
+// Listar os Produtos que não tenham sido comprados
+select prd.product_id, pr.product_name
+from products prd
+left join orders_item ord_i
+  on prd.product_id = ord_i.product_id
+where ord_i.order_id is null
+
+// Listar os Produtos sem Estoque
+select prd.product_id, pr.product_name
+from products prd
+inner join stoks stk
+  on prd.product_id = stk.product_id
+where stk.quantity = 0
+
+// Agrupar a quantidade de vendas que uma determinada Marca por Loja
+select brd.brand_name, count(*) "total vendas", str.store_name
+from orders_item ord_i
+inner join products prd 
+  on ord_i.product_id = prd.product_id
+inner join brands brd 
+  on brd.brand_id = prd.brand_id
+inner join stoks stk 
+  on stk.product_id = prd.product_id
+inner join stores str 
+  on str.store_id = stk.store_id
+group by brd.brand_name
+
+// Listar os Funcionarios que não estejam relacionados a um Pedido.
+select stf.staff_id, stf.first_name, stf.last_name
+from staffs stf
+left join orders ord 
+  on ord.staff_id = stf.staff_id
+where ord.order_id is null
+
+
